@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-background: #FDFCF8;
+  --color-foreground: #2C2C24;
+  --color-primary: #5D7052;
+  --color-secondary: #C18C5D;
+  --color-accent: #E6DCCD;
+  --color-muted: #F0EBE5;
+  --color-border: #DED8CF;
+}
+
+body {
+  background-color: #FDFCF8;
+  color: #2C2C24;
+  font-family: 'Nunito', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Accessible soft natural focus indicator */
+*:focus-visible {
+  outline: 2px solid #5D7052 !important;
+  outline-offset: 2px !important;
+}
+
+/* Paper grain / noise texture overlay */
+.paper-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Organic amorphous blob shape classes */
+.rounded-blob-1 {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}
+
+.rounded-blob-2 {
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+}
+
+.rounded-blob-3 {
+  border-radius: 50% 50% 30% 70% / 50% 60% 40% 50%;
+}
+
+/* Organic floating subtle animation */
+@keyframes natural-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.8deg);
+  }
+}
+
+.animate-natural-float {
+  animation: natural-float 8s ease-in-out infinite;
+}
+
+/* Soft earth-toned scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F0EBE5;
+}
+::-webkit-scrollbar-thumb {
+  background: #DED8CF;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5D7052;
+}
+
+/* Print styles */
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #2C2C24 !important;
+  }
+  .no-print, .paper-grain, .blob-ambient {
+    display: none !important;
+  }
+}
