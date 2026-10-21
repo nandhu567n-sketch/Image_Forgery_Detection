@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Maximize2 } from 'lucide-react';
+import { Maximize2, X } from 'lucide-react';
 
 interface ImageCompareProps {
   originalSrc: string | null;
@@ -21,12 +21,12 @@ export const ImageCompare: React.FC<ImageCompareProps> = ({
 
   if (!available || !mapSrc) {
     return (
-      <div className="w-full h-56 rounded-2xl border border-dashed border-[#DED8CF] bg-[#F0EBE5]/40 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+      <div className="w-full h-56 rounded-xl border border-dashed border-white/[0.08] bg-white/[0.02] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
         <div className="z-10 max-w-md space-y-2">
-          <p className="text-xs uppercase tracking-wider text-[#5D7052] font-bold">
+          <p className="text-xs font-mono uppercase tracking-widest text-[#5E6AD2]">
             [ Signal Map Not Computed ]
           </p>
-          <p className="text-xs text-[#78786C] italic leading-relaxed">
+          <p className="text-xs text-[#8A8F98] italic leading-relaxed font-sans">
             {emptyMessage}
           </p>
         </div>
@@ -39,15 +39,15 @@ export const ImageCompare: React.FC<ImageCompareProps> = ({
   return (
     <div className="w-full space-y-3">
       {/* View Switcher Pills */}
-      <div className="flex items-center justify-between border-b border-[#DED8CF]/80 pb-2.5 text-xs">
-        <div className="flex items-center space-x-1.5">
+      <div className="flex items-center justify-between border-b border-white/[0.06] pb-2.5 text-xs">
+        <div className="flex items-center space-x-1.5 p-0.5 rounded-lg bg-white/[0.03] border border-white/[0.06]">
           <button
             type="button"
             onClick={() => setViewMode('SIDE_BY_SIDE')}
-            className={`px-3 py-1 rounded-full text-xs font-bold transition-all duration-300 cursor-pointer ${
+            className={`px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 cursor-pointer ${
               viewMode === 'SIDE_BY_SIDE'
-                ? 'bg-[#5D7052] text-white shadow-sm'
-                : 'bg-white text-[#4A4A40] border border-[#DED8CF] hover:bg-[#F0EBE5]'
+                ? 'bg-[#5E6AD2] text-white shadow-cta font-semibold'
+                : 'text-[#8A8F98] hover:text-[#EDEDEF] hover:bg-white/[0.04]'
             }`}
           >
             Dual View
@@ -55,10 +55,10 @@ export const ImageCompare: React.FC<ImageCompareProps> = ({
           <button
             type="button"
             onClick={() => setViewMode('OVERLAY')}
-            className={`px-3 py-1 rounded-full text-xs font-bold transition-all duration-300 cursor-pointer ${
+            className={`px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 cursor-pointer ${
               viewMode === 'OVERLAY'
-                ? 'bg-[#5D7052] text-white shadow-sm'
-                : 'bg-white text-[#4A4A40] border border-[#DED8CF] hover:bg-[#F0EBE5]'
+                ? 'bg-[#5E6AD2] text-white shadow-cta font-semibold'
+                : 'text-[#8A8F98] hover:text-[#EDEDEF] hover:bg-white/[0.04]'
             }`}
           >
             Overlay
@@ -66,10 +66,10 @@ export const ImageCompare: React.FC<ImageCompareProps> = ({
           <button
             type="button"
             onClick={() => setViewMode('MAP_ONLY')}
-            className={`px-3 py-1 rounded-full text-xs font-bold transition-all duration-300 cursor-pointer ${
+            className={`px-3 py-1 rounded-md text-xs font-medium transition-all duration-200 cursor-pointer ${
               viewMode === 'MAP_ONLY'
-                ? 'bg-[#5D7052] text-white shadow-sm'
-                : 'bg-white text-[#4A4A40] border border-[#DED8CF] hover:bg-[#F0EBE5]'
+                ? 'bg-[#5E6AD2] text-white shadow-cta font-semibold'
+                : 'text-[#8A8F98] hover:text-[#EDEDEF] hover:bg-white/[0.04]'
             }`}
           >
             Map Only
@@ -79,7 +79,7 @@ export const ImageCompare: React.FC<ImageCompareProps> = ({
         <button
           type="button"
           onClick={() => setIsFullscreen(!isFullscreen)}
-          className="p-1.5 rounded-full border border-[#DED8CF] bg-white text-[#4A4A40] hover:bg-[#5D7052] hover:text-white transition-all duration-300"
+          className="p-1.5 rounded-lg border border-white/[0.08] bg-white/[0.03] text-[#8A8F98] hover:text-[#EDEDEF] hover:bg-white/[0.08] transition-all duration-200 cursor-pointer"
           title="Toggle Inspection Modal"
           aria-label="Toggle Fullscreen"
         >
@@ -89,21 +89,23 @@ export const ImageCompare: React.FC<ImageCompareProps> = ({
 
       {/* Visual Canvas Area */}
       <div
-        className={`w-full rounded-2xl border border-[#DED8CF] bg-white p-3 shadow-sm relative ${
-          isFullscreen ? 'fixed inset-4 z-50 bg-white p-8 shadow-float overflow-auto rounded-3xl' : ''
+        className={`w-full rounded-xl border border-white/[0.08] bg-[#020203] p-3 shadow-inner relative ${
+          isFullscreen
+            ? 'fixed inset-4 z-50 bg-[#0a0a0c]/98 backdrop-blur-2xl p-6 sm:p-8 shadow-glass overflow-auto rounded-2xl border border-white/[0.12]'
+            : ''
         }`}
       >
         {isFullscreen && (
-          <div className="flex justify-between items-center pb-4 border-b border-[#DED8CF] mb-4">
-            <span className="font-serif font-bold text-lg text-[#2C2C24]">
+          <div className="flex justify-between items-center pb-4 border-b border-white/[0.08] mb-4">
+            <span className="font-semibold text-lg text-[#EDEDEF]">
               Inspection Plate: {title}
             </span>
             <button
               type="button"
               onClick={() => setIsFullscreen(false)}
-              className="px-4 py-1.5 bg-[#2C2C24] text-white rounded-full text-xs font-bold"
+              className="p-1.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.12] text-[#EDEDEF] transition-colors cursor-pointer"
             >
-              Close
+              <X className="w-4 h-4" />
             </button>
           </div>
         )}
@@ -111,10 +113,10 @@ export const ImageCompare: React.FC<ImageCompareProps> = ({
         {viewMode === 'SIDE_BY_SIDE' && (
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <div className="text-[11px] font-bold text-[#78786C] uppercase tracking-wider">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-[#8A8F98]">
                 Source Evidence
               </div>
-              <div className="aspect-square bg-[#F0EBE5] rounded-xl border border-[#DED8CF]/60 overflow-hidden flex items-center justify-center">
+              <div className="aspect-square bg-black rounded-lg border border-white/[0.06] overflow-hidden flex items-center justify-center">
                 {originalSrc ? (
                   <img
                     src={originalSrc}
@@ -122,15 +124,15 @@ export const ImageCompare: React.FC<ImageCompareProps> = ({
                     className="w-full h-full object-contain filter grayscale"
                   />
                 ) : (
-                  <span className="text-xs text-[#78786C]">No Media Loaded</span>
+                  <span className="text-xs text-[#8A8F98] font-mono">No Media Loaded</span>
                 )}
               </div>
             </div>
             <div className="space-y-1.5">
-              <div className="text-[11px] font-bold text-[#78786C] uppercase tracking-wider">
+              <div className="text-[10px] font-mono uppercase tracking-widest text-[#8A8F98]">
                 Signal Heatmap
               </div>
-              <div className="aspect-square bg-white rounded-xl border border-[#DED8CF] overflow-hidden flex items-center justify-center">
+              <div className="aspect-square bg-black rounded-lg border border-white/[0.06] overflow-hidden flex items-center justify-center">
                 <img
                   src={mapDataUri}
                   alt={`${title} Map`}
@@ -143,21 +145,21 @@ export const ImageCompare: React.FC<ImageCompareProps> = ({
 
         {viewMode === 'OVERLAY' && (
           <div className="space-y-1.5">
-            <div className="text-[11px] font-bold text-[#78786C] uppercase tracking-wider">
+            <div className="text-[10px] font-mono uppercase tracking-widest text-[#8A8F98]">
               Multiply Blend Overlay (Dense Tone = Elevated Anomaly)
             </div>
-            <div className="aspect-square max-h-80 w-full mx-auto bg-white rounded-xl border border-[#DED8CF] relative overflow-hidden flex items-center justify-center">
+            <div className="aspect-square max-h-80 w-full mx-auto bg-black rounded-lg border border-white/[0.06] relative overflow-hidden flex items-center justify-center">
               {originalSrc && (
                 <img
                   src={originalSrc}
                   alt="Base Image"
-                  className="absolute inset-0 w-full h-full object-contain filter grayscale opacity-60"
+                  className="absolute inset-0 w-full h-full object-contain filter grayscale opacity-50"
                 />
               )}
               <img
                 src={mapDataUri}
                 alt={`${title} Overlay Map`}
-                className="absolute inset-0 w-full h-full object-contain mix-blend-multiply opacity-90 filter contrast-150"
+                className="absolute inset-0 w-full h-full object-contain mix-blend-screen opacity-90 filter contrast-150"
               />
             </div>
           </div>
@@ -165,10 +167,10 @@ export const ImageCompare: React.FC<ImageCompareProps> = ({
 
         {viewMode === 'MAP_ONLY' && (
           <div className="space-y-1.5">
-            <div className="text-[11px] font-bold text-[#78786C] uppercase tracking-wider">
+            <div className="text-[10px] font-mono uppercase tracking-widest text-[#8A8F98]">
               8-Bit High-Resolution Signal Distribution
             </div>
-            <div className="aspect-square max-h-80 w-full mx-auto bg-white rounded-xl border border-[#DED8CF] overflow-hidden flex items-center justify-center">
+            <div className="aspect-square max-h-80 w-full mx-auto bg-black rounded-lg border border-white/[0.06] overflow-hidden flex items-center justify-center">
               <img
                 src={mapDataUri}
                 alt={`${title} High-Res Map`}
@@ -179,19 +181,19 @@ export const ImageCompare: React.FC<ImageCompareProps> = ({
         )}
       </div>
 
-      {/* 5-Step Grayscale Step Bar inside Rounded Pill Track */}
+      {/* 5-Step Grayscale Step Bar */}
       <div className="space-y-1.5 pt-1">
-        <div className="flex justify-between items-center text-[11px] font-semibold text-[#78786C]">
+        <div className="flex justify-between items-center text-[10px] font-mono text-[#8A8F98]">
           <span>Low Residual (0%)</span>
-          <span className="font-bold text-[#2C2C24] uppercase tracking-wider">Anomaly Density</span>
+          <span className="uppercase tracking-widest text-[#EDEDEF]">Anomaly Density</span>
           <span>High Residual (100%)</span>
         </div>
-        <div className="grid grid-cols-5 gap-1 h-3 w-full rounded-full border border-[#DED8CF] p-0.5 bg-white overflow-hidden shadow-inner">
-          <div className="bg-white rounded-l-full" title="0% - Low" />
-          <div className="bg-[#E5E5E5]" title="25% - Marginal" />
-          <div className="bg-[#A3A3A3]" title="50% - Moderate" />
-          <div className="bg-[#525252]" title="75% - Elevated" />
-          <div className="bg-[#2C2C24] rounded-r-full" title="100% - Critical" />
+        <div className="grid grid-cols-5 gap-1 h-2 w-full rounded-full border border-white/[0.08] p-0.5 bg-white/[0.03] overflow-hidden">
+          <div className="bg-white/[0.1] rounded-l-full" title="0% - Low" />
+          <div className="bg-white/[0.25]" title="25% - Marginal" />
+          <div className="bg-indigo-500/50" title="50% - Moderate" />
+          <div className="bg-[#5E6AD2]" title="75% - Elevated" />
+          <div className="bg-white rounded-r-full" title="100% - Critical" />
         </div>
       </div>
     </div>

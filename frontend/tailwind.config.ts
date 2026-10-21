@@ -8,77 +8,71 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: '#FDFCF8',      // Rice Paper
-        foreground: '#2C2C24',      // Deep Loam
-        primary: {
-          DEFAULT: '#5D7052',       // Moss Green
-          foreground: '#F3F4F1',    // Pale Mist
-          light: '#768B6A',
-          dark: '#45543D',
+        background: {
+          deep: '#020203',
+          DEFAULT: '#050506',
+          elevated: '#0a0a0c',
         },
-        secondary: {
-          DEFAULT: '#C18C5D',       // Terracotta / Clay
-          foreground: '#FFFFFF',
-          light: '#D4A478',
-          dark: '#A67245',
+        surface: {
+          DEFAULT: 'rgba(255, 255, 255, 0.05)',
+          hover: 'rgba(255, 255, 255, 0.08)',
+        },
+        foreground: {
+          DEFAULT: '#EDEDEF',
+          muted: '#8A8F98',
+          subtle: 'rgba(255, 255, 255, 0.60)',
         },
         accent: {
-          DEFAULT: '#E6DCCD',       // Sand / Beige
-          foreground: '#4A4A40',    // Bark
-        },
-        muted: {
-          DEFAULT: '#F0EBE5',       // Stone
-          foreground: '#78786C',    // Dried Grass
+          DEFAULT: '#5E6AD2',
+          bright: '#6872D9',
+          glow: 'rgba(94, 106, 210, 0.3)',
         },
         border: {
-          DEFAULT: '#DED8CF',       // Raw Timber
-          light: '#EBE6DE',
+          DEFAULT: 'rgba(255, 255, 255, 0.06)',
+          hover: 'rgba(255, 255, 255, 0.10)',
+          accent: 'rgba(94, 106, 210, 0.30)',
         },
-        destructive: {
-          DEFAULT: '#A85448',       // Burnt Sienna
-          foreground: '#FFFFFF',
-        },
-        card: {
-          DEFAULT: '#FEFEFA',       // Warm Alabaster
-          foreground: '#2C2C24',
-        },
-        loam: '#2C2C24',
-        moss: '#5D7052',
-        clay: '#C18C5D',
-        sand: '#E6DCCD',
-        stone: '#F0EBE5',
-        timber: '#DED8CF',
-        bark: '#4A4A40',
       },
       fontFamily: {
-        serif: ['"Fraunces"', 'Georgia', 'serif'],
-        sans: ['"Nunito"', 'system-ui', 'sans-serif'],
-        body: ['"Nunito"', 'system-ui', 'sans-serif'],
-        mono: ['"Nunito"', 'sans-serif'], // Pure Organic mode: map mono classes to rounded Nunito
+        sans: ['"Inter"', '"Geist Sans"', 'system-ui', 'sans-serif'],
+        mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
       },
       borderRadius: {
         '2xl': '1rem',
         '3xl': '1.5rem',
-        '4xl': '2rem',
-        '5xl': '2.5rem',
-        'blob-1': '60% 40% 30% 70% / 60% 30% 70% 40%',
-        'blob-2': '30% 70% 70% 30% / 30% 30% 70% 70%',
-        'blob-3': '50% 50% 30% 70% / 50% 60% 40% 50%',
-      },
-      boxShadow: {
-        'soft': '0 4px 20px -2px rgba(93, 112, 82, 0.15)',
-        'float': '0 10px 40px -10px rgba(193, 140, 93, 0.2)',
-        'earth': '0 8px 30px -4px rgba(74, 74, 64, 0.08)',
-        'card-hover': '0 20px 40px -10px rgba(93, 112, 82, 0.18)',
-      },
-      transitionDuration: {
-        DEFAULT: '300ms',
-        '300': '300ms',
-        '500': '500ms',
-        '700': '700ms',
       },
       transitionTimingFunction: {
-        DEFAULT: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        'expo-out': 'cubic-bezier(0.16, 1, 0.3, 1)',
+      },
+      boxShadow: {
+        'glass': '0 0 0 1px rgba(255,255,255,0.06), 0 2px 20px rgba(0,0,0,0.4), 0 0 40px rgba(0,0,0,0.2)',
+        'glass-hover': '0 0 0 1px rgba(255,255,255,0.1), 0 8px 40px rgba(0,0,0,0.5), 0 0 80px rgba(94,106,210,0.1)',
+        'cta': '0 0 0 1px rgba(94,106,210,0.5), 0 4px 12px rgba(94,106,210,0.3), inset 0 1px 0 0 rgba(255,255,255,0.2)',
+        'inner-highlight': 'inset 0 1px 0 0 rgba(255,255,255,0.1)',
+      },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+          '50%': { transform: 'translateY(-20px) rotate(1deg)' },
+        },
+        pulseGlow: {
+          '0%, 100%': { opacity: '0.2' },
+          '50%': { opacity: '0.4' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '0% 50%' },
+          '100%': { backgroundPosition: '200% 50%' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(8px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        'float': 'float 9s cubic-bezier(0.16, 1, 0.3, 1) infinite',
+        'pulse-glow': 'pulseGlow 6s ease-in-out infinite',
+        'shimmer': 'shimmer 4s ease-in-out infinite',
+        'fade-in': 'fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       },
     },
   },

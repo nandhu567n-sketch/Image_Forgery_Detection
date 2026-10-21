@@ -17,26 +17,26 @@ export const ScoreMeter: React.FC<ScoreMeterProps> = ({
 
   return (
     <div className="w-full space-y-1.5">
-      <div className="flex items-center justify-between text-xs font-semibold">
-        <span className="text-[#78786C] tracking-wide uppercase">{label}</span>
-        <span className="font-bold text-[#2C2C24]">
+      <div className="flex items-center justify-between text-xs font-mono">
+        <span className="text-[#8A8F98] tracking-wider uppercase">{label}</span>
+        <span className="font-semibold text-[#EDEDEF]">
           {isAvailable ? clampedScore.toFixed(4) : 'N/A'}
         </span>
       </div>
 
-      <div className="w-full h-2.5 rounded-full border border-[#DED8CF] bg-[#F0EBE5]/70 p-0.5 relative overflow-hidden">
+      <div className="w-full h-2 rounded-full border border-white/[0.08] bg-white/[0.04] p-0.5 relative overflow-hidden">
         {isAvailable ? (
           <div
-            className="h-full rounded-full bg-[#5D7052] transition-all duration-500 ease-out"
+            className="h-full rounded-full bg-gradient-to-r from-[#5E6AD2] to-[#6872D9] transition-all duration-500 ease-out shadow-[0_0_8px_rgba(94,106,210,0.5)]"
             style={{ width: `${percentage}%` }}
           />
         ) : (
-          <div className="h-full w-full bg-[#E6DCCD]/40" />
+          <div className="h-full w-full bg-white/[0.02]" />
         )}
       </div>
 
       {showTicks && (
-        <div className="flex justify-between text-[11px] font-semibold text-[#78786C] pt-0.5">
+        <div className="flex justify-between text-[10px] font-mono text-[#8A8F98] pt-0.5">
           <span>0.00 (Authentic)</span>
           <span>0.50 (Suspicious)</span>
           <span>1.00 (Forged)</span>

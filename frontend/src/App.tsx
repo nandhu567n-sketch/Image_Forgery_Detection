@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Download, FileText } from 'lucide-react';
 import { Hero } from './components/Hero';
+import { ShowcaseDashboard } from './components/ShowcaseDashboard';
 import { UploadZone } from './components/UploadZone';
 import { VerdictBlock } from './components/VerdictBlock';
 import { SectionRule } from './components/SectionRule';
@@ -9,6 +10,7 @@ import { ContributionChart } from './components/ContributionChart';
 import { AdversarialTable } from './components/AdversarialTable';
 import { PullQuote } from './components/PullQuote';
 import { Footer } from './components/Footer';
+import { LinearButton } from './components/LinearButton';
 import { detectForgery, checkBackendHealth } from './api/client';
 import type { ForensicResponse, TechniquePlateMeta } from './types/forensic';
 
@@ -115,6 +117,7 @@ const TECHNIQUE_METAS: TechniquePlateMeta[] = [
 ];
 
 export const App: React.FC = () => {
+  const [activeView, setActiveView] = useState<'showcase' | 'studio'>('showcase');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [originalImageSrc, setOriginalImageSrc] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -161,6 +164,50 @@ export const App: React.FC = () => {
     }
   };
 
+  const handleRunSampleAnalysis = (type: 'spliced' | 'authentic') => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 400;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    if (type === 'spliced') {
+      ctx.fillStyle = '#0a0a0c';
+      ctx.fillRect(0, 0, 400, 400);
+      for (let i = 0; i < 400; i += 24) {
+        ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+        ctx.strokeRect(i, i, 48, 48);
+      }
+      ctx.fillStyle = '#5E6AD2';
+      ctx.fillRect(100, 120, 190, 150);
+      ctx.fillStyle = '#EDEDEF';
+      ctx.font = '20px Inter, sans-serif';
+      ctx.fillText('SAMPLE SPLICED', 115, 185);
+      ctx.fillText('INSERT REGION', 115, 225);
+    } else {
+      const grad = ctx.createLinearGradient(0, 0, 400, 400);
+      grad.addColorStop(0, '#050506');
+      grad.addColorStop(0.5, '#0a0a0c');
+      grad.addColorStop(1, '#020203');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 400, 400);
+      ctx.fillStyle = '#EDEDEF';
+      ctx.font = '20px Inter, sans-serif';
+      ctx.fillText('NATURAL TEXTURE', 100, 200);
+    }
+
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const file = new File([blob], `sample_${type}.jpg`, { type: 'image/jpeg' });
+        handleFileSelect(file);
+        setActiveView('studio');
+        setTimeout(() => {
+          handleAnalyze(file);
+        }, 150);
+      }
+    }, 'image/jpeg', 0.92);
+  };
+
   const handleScrollToUpload = () => {
     const el = document.getElementById('upload-section');
     el?.scrollIntoView({ behavior: 'smooth' });
@@ -171,156 +218,184 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFCF8] text-[#2C2C24] selection:bg-[#5D7052]/20 selection:text-[#2C2C24] relative">
-      {/* Paper Grain Overlay */}
-      <div className="paper-grain" />
+    <div className="min-h-screen bg-[#050506] linear-base-bg text-[#EDEDEF] selection:bg-[#5E6AD2]/30 selection:text-white relative">
+      {/* Layer 2: Noise Texture Overlay */}
+      <div className="linear-noise" />
+
+      {/* Layer 4: Technical 64px Grid Overlay */}
+      <div className="linear-grid" />
+
+      {/* Layer 3: Animated Ambient Lighting Blobs */}
+      <div className="ambient-blob-primary" />
+      <div className="ambient-blob-secondary" />
+      <div className="ambient-blob-tertiary" />
+      <div className="ambient-blob-pulse" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
-        {/* Section 1: Hero */}
+        {/* Navigation & Header */}
         <Hero
           onScrollToUpload={handleScrollToUpload}
           isBackendConnected={isBackendConnected}
+          activeView={activeView}
+          onViewChange={setActiveView}
         />
 
-        {/* Section 2: Upload Zone */}
-        <section className="space-y-6">
-          <SectionRule
-            title="Evidence Deposit & Container Ingestion"
-            subtitle="Input Stream"
-            number="01"
+        {/* View 1: Linear / Modern Showcase Dashboard */}
+        {activeView === 'showcase' && (
+          <ShowcaseDashboard
+            onNavigateToStudio={() => {
+              setActiveView('studio');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onRunSampleAnalysis={handleRunSampleAnalysis}
+            isBackendConnected={isBackendConnected}
           />
-          <UploadZone
-            onAnalyze={handleAnalyze}
-            isLoading={isLoading}
-            selectedFile={selectedFile}
-            onFileSelect={handleFileSelect}
-            errorMessage={errorMessage}
-          />
-        </section>
+        )}
 
-        {/* Results Sections - Rendered when results exist */}
-        {results && (
+        {/* View 2: Full Forensic Studio */}
+        {activeView === 'studio' && (
           <div className="space-y-16 animate-fadeIn">
-            {/* Section 3: Verdict Section (Warm Alabaster Elevated Card) */}
-            <div id="verdict-section" className="pt-4">
-              <SectionRule
-                title="Forensic Assessment & Decision"
-                subtitle="Calibrated Fusion"
-                number="02"
-                thick
-              />
-              <VerdictBlock
-                verdict={results.verdict}
-                probability={results.raw_forgery_probability}
-                confidence={results.confidence}
-                disclaimer={results.disclaimer}
-                highlightedImageBase64={results.highlighted_image_base64}
-              />
-            </div>
-
-            {/* Section 4: Evidence Section (11 Numbered Plates) */}
-            <section className="space-y-8">
-              <SectionRule
-                title="Forensic Evidence Plates"
-                subtitle="11 Signal Probes"
-                number="03"
-              />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-4 sm:p-6 rounded-[2.5rem] bg-[#FEFEFA]/70 border border-[#DED8CF] shadow-sm">
-                {TECHNIQUE_METAS.map((meta) => {
-                  let report = results.technique_reports?.[meta.key];
-                  if (!report && meta.key === 'xai') {
-                    const splicingRep = results.technique_reports?.['splicing'];
-                    if (splicingRep) {
-                      report = {
-                        score: splicingRep.score,
-                        available: splicingRep.available,
-                        message: 'Grad-CAM visual explanation highlighting neural activations in the final convolutional layer of MobileNetV2.',
-                        map_base64: splicingRep.map_base64,
-                        details: {
-                          method: 'Grad-CAM',
-                          target_layer: 'MobileNetV2 features[-1]',
-                        },
-                      };
-                    }
-                  }
-
-                  return (
-                    <EvidencePlate
-                      key={meta.key}
-                      meta={meta}
-                      report={report}
-                      originalImageSrc={originalImageSrc}
-                    />
-                  );
-                })}
-              </div>
-            </section>
-
-            {/* Section 5: Contribution Section */}
+            {/* Section 2: Upload Zone */}
             <section className="space-y-6">
               <SectionRule
-                title="Feature Attribution Dynamics"
-                subtitle="Explainable Fusion"
-                number="04"
+                title="Evidence Deposit & Container Ingestion"
+                subtitle="Input Stream"
+                number="01"
               />
-              <ContributionChart
-                contributions={results.technique_contributions}
+              <UploadZone
+                onAnalyze={handleAnalyze}
+                isLoading={isLoading}
+                selectedFile={selectedFile}
+                onFileSelect={handleFileSelect}
+                errorMessage={errorMessage}
               />
             </section>
 
-            {/* Section 6: Adversarial Robustness Table */}
-            <section className="space-y-6">
-              <SectionRule
-                title="Adversarial Stress & Integrity Audit"
-                subtitle="Perturbation Resilience"
-                number="05"
-              />
-              <div className="rounded-2xl border border-[#DED8CF] bg-white p-6 sm:p-8 shadow-soft">
-                <AdversarialTable
-                  score={results.technique_scores?.['adversarial']}
-                  available={results.technique_reports?.['adversarial']?.available}
-                />
-              </div>
-            </section>
-
-            {/* Section 7: Summary Pull-Quote */}
-            <PullQuote
-              verdict={results.verdict}
-              probability={results.raw_forgery_probability}
-              reports={results.technique_reports}
-            />
-
-            {/* Section 8: Juridical Report / PDF Export Section */}
-            <section className="w-full rounded-[2.5rem] border border-[#DED8CF] bg-[#FEFEFA] p-8 sm:p-12 text-center space-y-6 shadow-soft no-print">
-              <div className="max-w-2xl mx-auto space-y-3">
-                <div className="w-12 h-12 mx-auto rounded-full bg-[#5D7052]/10 text-[#5D7052] flex items-center justify-center">
-                  <FileText className="w-6 h-6" />
+            {/* Results Sections - Rendered when results exist */}
+            {results && (
+              <div className="space-y-16">
+                {/* Section 3: Verdict Section */}
+                <div id="verdict-section" className="pt-4">
+                  <SectionRule
+                    title="Forensic Assessment & Decision"
+                    subtitle="Calibrated Fusion"
+                    number="02"
+                    thick
+                  />
+                  <VerdictBlock
+                    verdict={results.verdict}
+                    probability={results.raw_forgery_probability}
+                    confidence={results.confidence}
+                    disclaimer={results.disclaimer}
+                    highlightedImageBase64={results.highlighted_image_base64}
+                  />
                 </div>
-                <h3 className="font-serif text-3xl font-bold tracking-tight text-[#2C2C24]">
-                  Generate Juridical Evidence Dossier
-                </h3>
-                <p className="text-sm text-[#78786C] leading-relaxed">
-                  Export complete technical dossier including container metadata logs, discrete cosine 
-                  transform histograms, localized keypoint coordinates, and calibrated posterior probabilities.
-                </p>
-              </div>
 
-              <div className="flex justify-center pt-2">
-                <button
-                  type="button"
-                  onClick={handlePrintDossier}
-                  className="min-h-[48px] px-8 py-3.5 bg-transparent text-[#5D7052] font-bold text-xs uppercase tracking-wider rounded-full border-2 border-[#5D7052] hover:bg-[#5D7052] hover:text-white hover:scale-105 active:scale-95 transition-all duration-300 flex items-center space-x-2 shadow-soft cursor-pointer"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>Download / Print Forensic Dossier (PDF)</span>
-                </button>
-              </div>
+                {/* Section 4: Evidence Section (11 Numbered Plates) */}
+                <section className="space-y-8">
+                  <SectionRule
+                    title="Forensic Evidence Plates"
+                    subtitle="11 Signal Probes"
+                    number="03"
+                  />
 
-              <div className="text-[11px] text-[#78786C]">
-                SHA-256 Immutable Audit Signature Generated On Export
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 sm:p-6 rounded-2xl bg-[#0a0a0c]/60 border border-white/[0.06] shadow-glass backdrop-blur-md">
+                    {TECHNIQUE_METAS.map((meta) => {
+                      let report = results.technique_reports?.[meta.key];
+                      if (!report && meta.key === 'xai') {
+                        const splicingRep = results.technique_reports?.['splicing'];
+                        if (splicingRep) {
+                          report = {
+                            score: splicingRep.score,
+                            available: splicingRep.available,
+                            message: 'Grad-CAM visual explanation highlighting neural activations in the final convolutional layer of MobileNetV2.',
+                            map_base64: splicingRep.map_base64,
+                            details: {
+                              method: 'Grad-CAM',
+                              target_layer: 'MobileNetV2 features[-1]',
+                            },
+                          };
+                        }
+                      }
+
+                      return (
+                        <EvidencePlate
+                          key={meta.key}
+                          meta={meta}
+                          report={report}
+                          originalImageSrc={originalImageSrc}
+                        />
+                      );
+                    })}
+                  </div>
+                </section>
+
+                {/* Section 5: Contribution Section */}
+                <section className="space-y-6">
+                  <SectionRule
+                    title="Feature Attribution Dynamics"
+                    subtitle="Explainable Fusion"
+                    number="04"
+                  />
+                  <ContributionChart
+                    contributions={results.technique_contributions}
+                  />
+                </section>
+
+                {/* Section 6: Adversarial Robustness Table */}
+                <section className="space-y-6">
+                  <SectionRule
+                    title="Adversarial Stress & Integrity Audit"
+                    subtitle="Perturbation Resilience"
+                    number="05"
+                  />
+                  <div className="rounded-2xl border border-white/[0.08] bg-[#0a0a0c]/90 backdrop-blur-xl p-6 sm:p-8 shadow-glass">
+                    <AdversarialTable
+                      score={results.technique_scores?.['adversarial']}
+                      available={results.technique_reports?.['adversarial']?.available}
+                    />
+                  </div>
+                </section>
+
+                {/* Section 7: Summary Pull-Quote */}
+                <PullQuote
+                  verdict={results.verdict}
+                  probability={results.raw_forgery_probability}
+                  reports={results.technique_reports}
+                />
+
+                {/* Section 8: Juridical Report / PDF Export Section */}
+                <section className="w-full rounded-2xl border border-white/[0.08] bg-[#0a0a0c]/90 backdrop-blur-xl p-8 sm:p-12 text-center space-y-6 shadow-glass no-print">
+                  <div className="max-w-2xl mx-auto space-y-3">
+                    <div className="w-12 h-12 mx-auto rounded-xl bg-[#5E6AD2]/20 border border-[#5E6AD2]/30 text-[#5E6AD2] flex items-center justify-center shadow-sm">
+                      <FileText className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#EDEDEF]">
+                      Generate Juridical Evidence Dossier
+                    </h3>
+                    <p className="text-xs sm:text-sm text-[#8A8F98] leading-relaxed max-w-xl mx-auto">
+                      Export complete technical dossier including container metadata logs, discrete cosine 
+                      transform histograms, localized keypoint coordinates, and calibrated posterior probabilities.
+                    </p>
+                  </div>
+
+                  <div className="flex justify-center pt-2">
+                    <LinearButton
+                      variant="primary"
+                      size="lg"
+                      icon={<Download className="w-4 h-4" />}
+                      onClick={handlePrintDossier}
+                    >
+                      Download / Print Forensic Dossier (PDF)
+                    </LinearButton>
+                  </div>
+
+                  <div className="text-[11px] font-mono text-[#8A8F98]">
+                    SHA-256 Immutable Audit Signature Generated On Export
+                  </div>
+                </section>
               </div>
-            </section>
+            )}
           </div>
         )}
 

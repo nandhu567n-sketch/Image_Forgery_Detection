@@ -1,4 +1,5 @@
 import React from 'react';
+import { LinearBadge } from './LinearBadge';
 
 interface MetadataTableProps {
   details?: Record<string, any>;
@@ -13,12 +14,12 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({
 }) => {
   if (!available || !details || Object.keys(details).length === 0) {
     return (
-      <div className="w-full h-56 rounded-2xl border border-dashed border-[#DED8CF] bg-[#F0EBE5]/40 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
+      <div className="w-full h-56 rounded-xl border border-dashed border-white/[0.08] bg-white/[0.02] flex flex-col items-center justify-center p-6 text-center relative overflow-hidden">
         <div className="z-10 max-w-md space-y-2">
-          <p className="text-xs uppercase tracking-wider text-[#5D7052] font-bold">
+          <p className="text-xs font-mono uppercase tracking-widest text-[#5E6AD2]">
             [ Container Stripped // No EXIF Headers ]
           </p>
-          <p className="text-xs text-[#78786C] italic leading-relaxed">
+          <p className="text-xs text-[#8A8F98] italic leading-relaxed font-sans">
             {message || 'The uploaded file contains no digital camera metadata stream. EXIF tags may have been stripped during web optimization or export.'}
           </p>
         </div>
@@ -42,38 +43,38 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({
 
   return (
     <div className="w-full space-y-3 text-xs">
-      <div className="rounded-2xl border border-[#DED8CF] overflow-hidden bg-white shadow-sm">
+      <div className="rounded-xl border border-white/[0.08] overflow-hidden bg-[#0a0a0c] shadow-inner">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-[#F0EBE5] text-[#2C2C24] text-[11px] uppercase tracking-wider border-b border-[#DED8CF]">
-              <th className="py-2.5 px-3.5 font-bold border-r border-[#DED8CF]/60">EXIF Parameter</th>
-              <th className="py-2.5 px-3.5 font-bold border-r border-[#DED8CF]/60">Extracted Value</th>
-              <th className="py-2.5 px-3.5 font-bold">Assessment</th>
+            <tr className="bg-white/[0.04] text-[#EDEDEF] text-[11px] font-mono uppercase tracking-wider border-b border-white/[0.08]">
+              <th className="py-2.5 px-3.5 font-semibold border-r border-white/[0.06]">EXIF Parameter</th>
+              <th className="py-2.5 px-3.5 font-semibold border-r border-white/[0.06]">Extracted Value</th>
+              <th className="py-2.5 px-3.5 font-semibold">Assessment</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#DED8CF]/60 bg-white">
+          <tbody className="divide-y divide-white/[0.04] font-mono">
             {displayRows.map((row, idx) => {
               const isSoftwareRow = row.key.includes('Software') && row.value !== 'None Reported';
               const isDimensionMismatch = row.key.includes('Dimensions') && details.dimensions_match === false;
               const hasFlag = isSoftwareRow || isDimensionMismatch;
 
               return (
-                <tr key={idx} className="hover:bg-[#FDFCF8] transition-colors duration-200">
-                  <td className="py-2 px-3.5 font-semibold text-[#2C2C24] border-r border-[#DED8CF]/60 whitespace-nowrap">
+                <tr key={idx} className="hover:bg-white/[0.03] transition-colors duration-150">
+                  <td className="py-2 px-3.5 font-medium text-[#EDEDEF] border-r border-white/[0.06] whitespace-nowrap">
                     {row.key}
                   </td>
-                  <td className="py-2 px-3.5 text-[#4A4A40] border-r border-[#DED8CF]/60 break-all">
+                  <td className="py-2 px-3.5 text-[#8A8F98] border-r border-white/[0.06] break-all">
                     {String(row.value)}
                   </td>
                   <td className="py-2 px-3.5 whitespace-nowrap">
                     {hasFlag ? (
-                      <span className="bg-[#A85448] text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
+                      <LinearBadge variant="danger" size="sm">
                         Anomaly Flagged
-                      </span>
+                      </LinearBadge>
                     ) : (
-                      <span className="text-[#5D7052] font-semibold text-[10px]">
+                      <LinearBadge variant="success" size="sm">
                         Verified
-                      </span>
+                      </LinearBadge>
                     )}
                   </td>
                 </tr>
@@ -84,11 +85,11 @@ export const MetadataTable: React.FC<MetadataTableProps> = ({
       </div>
 
       {anomalies.length > 0 && (
-        <div className="p-3.5 rounded-xl border border-[#A85448]/30 bg-[#A85448]/5 space-y-1">
-          <div className="font-bold text-[#A85448] uppercase tracking-wider text-[11px]">
+        <div className="p-3.5 rounded-xl border border-rose-500/30 bg-rose-500/10 space-y-1">
+          <div className="font-mono text-[11px] font-semibold text-rose-400 uppercase tracking-wider">
             [!] Detected Metadata Anomalies:
           </div>
-          <ul className="list-disc pl-4 space-y-0.5 text-[#4A4A40] text-[11px]">
+          <ul className="list-disc pl-4 space-y-0.5 text-rose-200 text-xs font-mono">
             {anomalies.map((anom, i) => (
               <li key={i}>{anom}</li>
             ))}

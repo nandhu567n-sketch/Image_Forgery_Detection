@@ -1,6 +1,7 @@
 import React from 'react';
 import type { ForensicVerdict, TechniqueReport } from '../types/forensic';
 import { Quote } from 'lucide-react';
+import { LinearBadge } from './LinearBadge';
 
 interface PullQuoteProps {
   verdict: ForensicVerdict;
@@ -28,24 +29,27 @@ export const PullQuote: React.FC<PullQuoteProps> = ({
   }
 
   return (
-    <div className="w-full my-12 rounded-[2rem] bg-[#F0EBE5]/50 border border-[#DED8CF] py-10 px-6 sm:px-12 text-center shadow-soft relative overflow-hidden">
+    <div className="w-full my-12 rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/[0.08] py-10 px-6 sm:px-12 text-center shadow-glass relative overflow-hidden">
+      {/* Top Edge Highlight */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+
       <div className="max-w-4xl mx-auto space-y-5">
-        <div className="w-10 h-10 mx-auto rounded-full bg-[#5D7052]/10 text-[#5D7052] flex items-center justify-center">
+        <div className="w-10 h-10 mx-auto rounded-xl bg-[#5E6AD2]/20 border border-[#5E6AD2]/30 text-[#5E6AD2] flex items-center justify-center shadow-sm">
           <Quote className="w-5 h-5 rotate-180" />
         </div>
 
-        <blockquote className="font-serif italic text-2xl md:text-3xl text-[#2C2C24] leading-relaxed max-w-3xl mx-auto">
+        <blockquote className="font-sans font-normal text-lg md:text-2xl text-[#EDEDEF] leading-relaxed max-w-3xl mx-auto">
           "{quote}"
         </blockquote>
 
-        <div className="pt-2 flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-[#78786C]">
-          <span className="px-3 py-1 rounded-full bg-white border border-[#DED8CF] text-[#2C2C24]">
-            Assessment: <strong>{verdict}</strong>
-          </span>
-          <span className="px-3 py-1 rounded-full bg-white border border-[#DED8CF] text-[#5D7052]">
+        <div className="pt-2 flex flex-wrap items-center justify-center gap-2.5 text-xs font-mono">
+          <LinearBadge variant="accent">
+            Assessment: {verdict}
+          </LinearBadge>
+          <LinearBadge variant="neutral">
             P(Forg) = {probability.toFixed(4)}
-          </span>
-          <span className="text-[#78786C]">
+          </LinearBadge>
+          <span className="text-[#8A8F98]">
             // Multimodal Cross-Verification
           </span>
         </div>

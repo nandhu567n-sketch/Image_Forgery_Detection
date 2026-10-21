@@ -1,4 +1,5 @@
 import React from 'react';
+import { LinearBadge } from './LinearBadge';
 
 interface AdversarialTableProps {
   score?: number | null;
@@ -71,45 +72,45 @@ export const AdversarialTable: React.FC<AdversarialTableProps> = ({
 
   return (
     <div className="w-full space-y-3 text-xs">
-      <div className="rounded-2xl border border-[#DED8CF] overflow-hidden bg-white shadow-sm">
+      <div className="rounded-xl border border-white/[0.08] overflow-hidden bg-[#0a0a0c] shadow-inner">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-[#F0EBE5] text-[#2C2C24] text-[11px] uppercase tracking-wider border-b border-[#DED8CF]">
-              <th className="py-2.5 px-3.5 font-bold border-r border-[#DED8CF]/60">Vector / Attack Type</th>
-              <th className="py-2.5 px-3.5 font-bold border-r border-[#DED8CF]/60">Perturbation Bound</th>
-              <th className="py-2.5 px-3.5 font-bold border-r border-[#DED8CF]/60">Signal Drift</th>
-              <th className="py-2.5 px-3.5 font-bold border-r border-[#DED8CF]/60">Resilience</th>
-              <th className="py-2.5 px-3.5 font-bold">Status</th>
+            <tr className="bg-white/[0.04] text-[#EDEDEF] text-[11px] font-mono uppercase tracking-wider border-b border-white/[0.08]">
+              <th className="py-2.5 px-3.5 font-semibold border-r border-white/[0.06]">Vector / Attack Type</th>
+              <th className="py-2.5 px-3.5 font-semibold border-r border-white/[0.06]">Perturbation Bound</th>
+              <th className="py-2.5 px-3.5 font-semibold border-r border-white/[0.06]">Signal Drift</th>
+              <th className="py-2.5 px-3.5 font-semibold border-r border-white/[0.06]">Resilience</th>
+              <th className="py-2.5 px-3.5 font-semibold">Status</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#DED8CF]/60 bg-white">
+          <tbody className="divide-y divide-white/[0.04] font-mono">
             {vectors.map((item, idx) => (
-              <tr key={idx} className="hover:bg-[#FDFCF8] transition-colors duration-200">
-                <td className="py-2 px-3.5 font-semibold text-[#2C2C24] border-r border-[#DED8CF]/60 whitespace-nowrap">
+              <tr key={idx} className="hover:bg-white/[0.03] transition-colors duration-150">
+                <td className="py-2 px-3.5 font-medium text-[#EDEDEF] border-r border-white/[0.06] whitespace-nowrap">
                   {item.vector}
                 </td>
-                <td className="py-2 px-3.5 text-[#4A4A40] border-r border-[#DED8CF]/60">
+                <td className="py-2 px-3.5 text-[#8A8F98] border-r border-white/[0.06]">
                   {item.perturbation}
                 </td>
-                <td className="py-2 px-3.5 text-[#4A4A40] border-r border-[#DED8CF]/60">
+                <td className="py-2 px-3.5 text-[#8A8F98] border-r border-white/[0.06]">
                   {item.detectionDrift}
                 </td>
-                <td className="py-2 px-3.5 font-bold text-[#2C2C24] border-r border-[#DED8CF]/60">
+                <td className="py-2 px-3.5 font-semibold text-[#EDEDEF] border-r border-white/[0.06]">
                   {item.resilienceScore}
                 </td>
                 <td className="py-2 px-3.5 whitespace-nowrap">
                   {item.status === 'RESILIENT' ? (
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#5D7052]/10 text-[#5D7052] text-[10px] font-bold">
+                    <LinearBadge variant="success" size="sm">
                       Resilient
-                    </span>
+                    </LinearBadge>
                   ) : item.status === 'SUSCEPTIBLE' ? (
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#C18C5D]/15 text-[#C18C5D] text-[10px] font-bold">
+                    <LinearBadge variant="warning" size="sm">
                       Susceptible
-                    </span>
+                    </LinearBadge>
                   ) : (
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#F0EBE5] text-[#78786C] text-[10px] font-semibold">
+                    <LinearBadge variant="neutral" size="sm">
                       Phase 3 Benchmark
-                    </span>
+                    </LinearBadge>
                   )}
                 </td>
               </tr>
@@ -118,11 +119,11 @@ export const AdversarialTable: React.FC<AdversarialTableProps> = ({
         </table>
       </div>
 
-      <div className="p-3.5 rounded-xl border border-[#DED8CF] bg-[#F0EBE5]/50 text-[11px] text-[#4A4A40] flex flex-col sm:flex-row justify-between items-center gap-2">
+      <div className="p-3.5 rounded-xl border border-white/[0.08] bg-white/[0.03] text-[11px] font-mono text-[#8A8F98] flex flex-col sm:flex-row justify-between items-center gap-2">
         <span>
-          Overall Perturbation Resistance Index: <strong>{meanResilience}</strong> (Feature Stability)
+          Overall Perturbation Resistance Index: <strong className="text-[#EDEDEF]">{meanResilience}</strong> (Feature Stability)
         </span>
-        <span className="font-bold text-[#5D7052] uppercase text-[10px]">
+        <span className="font-semibold text-[#5E6AD2] uppercase text-[10px]">
           {available ? 'Live Stress-Test Active' : 'Offline Benchmark'}
         </span>
       </div>

@@ -11,34 +11,34 @@ export const ContributionChart: React.FC<ContributionChartProps> = ({
 
   if (entries.length === 0) {
     return (
-      <div className="p-6 rounded-2xl border border-[#DED8CF] bg-white text-center text-xs text-[#78786C]">
+      <div className="p-6 rounded-2xl border border-white/[0.08] bg-[#0a0a0c] text-center text-xs text-[#8A8F98] font-mono">
         No fusion attribution coefficients recorded.
       </div>
     );
   }
 
-  const maxAbs = Math.max(...entries.map(([_, v]) => Math.abs(v)), 0.1);
+  const maxAbs = Math.max(...entries.map(([, v]) => Math.abs(v)), 0.1);
 
   return (
-    <div className="w-full rounded-2xl border border-[#DED8CF] bg-white p-6 sm:p-8 space-y-6 shadow-soft">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-[#DED8CF]/70 pb-4 gap-2">
+    <div className="w-full rounded-2xl border border-white/[0.08] bg-[#0a0a0c]/90 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-glass">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-white/[0.06] pb-4 gap-2">
         <div>
-          <h3 className="font-serif text-xl font-bold tracking-tight text-[#2C2C24]">
+          <h3 className="text-xl font-semibold tracking-tight text-[#EDEDEF]">
             Signal Attribution & Feature Contributions
           </h3>
-          <p className="text-xs text-[#78786C] font-medium mt-0.5">
-            Logistic regression weighted contributions (w_i · x_i)
+          <p className="text-xs text-[#8A8F98] font-mono mt-0.5">
+            Logistic regression calibrated contributions (w_i · x_i)
           </p>
         </div>
 
-        <div className="flex items-center space-x-4 text-xs font-semibold">
+        <div className="flex items-center space-x-4 text-xs font-mono">
           <div className="flex items-center space-x-1.5">
-            <span className="w-3 h-3 rounded-full bg-[#C18C5D]" />
-            <span className="text-[#4A4A40]">Authentic (- )</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+            <span className="text-[#8A8F98]">Authentic (- )</span>
           </div>
           <div className="flex items-center space-x-1.5">
-            <span className="w-3 h-3 rounded-full bg-[#5D7052]" />
-            <span className="text-[#4A4A40]">Forged (+ )</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[#5E6AD2]" />
+            <span className="text-[#EDEDEF]">Forged (+ )</span>
           </div>
         </div>
       </div>
@@ -51,35 +51,35 @@ export const ContributionChart: React.FC<ContributionChartProps> = ({
 
           return (
             <div key={key} className="space-y-1.5">
-              <div className="flex justify-between text-xs font-semibold">
-                <span className="text-[#2C2C24] font-bold">
+              <div className="flex justify-between text-xs font-mono">
+                <span className="text-[#EDEDEF] font-medium">
                   {formattedKey}
                 </span>
-                <span className={val >= 0 ? 'text-[#5D7052] font-bold' : 'text-[#C18C5D] font-bold'}>
+                <span className={val >= 0 ? 'text-[#6872D9] font-semibold' : 'text-amber-400 font-semibold'}>
                   {val >= 0 ? `+${val.toFixed(4)}` : val.toFixed(4)}
                 </span>
               </div>
 
               {/* Zero-Centered Rounded Track */}
-              <div className="w-full h-5 rounded-full border border-[#DED8CF] bg-[#F0EBE5]/50 relative flex overflow-hidden">
+              <div className="w-full h-4 rounded-full border border-white/[0.08] bg-white/[0.03] relative flex overflow-hidden">
                 {/* Left Side (Negative / Authentic) */}
                 <div className="w-1/2 h-full flex justify-end items-center pr-0.5">
                   {!isPositive && (
                     <div
-                      className="h-3 rounded-l-full bg-[#C18C5D] transition-all duration-500 ease-out"
+                      className="h-2.5 rounded-l-full bg-amber-400 transition-all duration-500 ease-out"
                       style={{ width: `${barWidthPercent * 2}%` }}
                     />
                   )}
                 </div>
 
                 {/* Center Divider */}
-                <div className="w-[1.5px] h-full bg-[#DED8CF] z-10" />
+                <div className="w-[1.5px] h-full bg-white/20 z-10" />
 
                 {/* Right Side (Positive / Forged) */}
                 <div className="w-1/2 h-full flex justify-start items-center pl-0.5">
                   {isPositive && (
                     <div
-                      className="h-3 rounded-r-full bg-[#5D7052] transition-all duration-500 ease-out"
+                      className="h-2.5 rounded-r-full bg-[#5E6AD2] transition-all duration-500 ease-out shadow-[0_0_8px_rgba(94,106,210,0.4)]"
                       style={{ width: `${barWidthPercent * 2}%` }}
                     />
                   )}
@@ -90,10 +90,10 @@ export const ContributionChart: React.FC<ContributionChartProps> = ({
         })}
       </div>
 
-      <div className="flex justify-between items-center pt-3 text-[11px] font-semibold text-[#78786C] border-t border-[#DED8CF]/60">
-        <span>← Deflects toward Authentic (Clay -)</span>
-        <span className="font-bold text-[#4A4A40]">[ 0.00 Equilibrium ]</span>
-        <span>Deflects toward Forged (Moss +) →</span>
+      <div className="flex justify-between items-center pt-3 text-[11px] font-mono text-[#8A8F98] border-t border-white/[0.06]">
+        <span>← Deflects toward Authentic (Negative)</span>
+        <span className="text-[#EDEDEF] font-semibold">[ 0.00 Equilibrium ]</span>
+        <span>Deflects toward Forged (Positive) →</span>
       </div>
     </div>
   );

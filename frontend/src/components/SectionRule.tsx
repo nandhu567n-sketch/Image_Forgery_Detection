@@ -17,27 +17,25 @@ export const SectionRule: React.FC<SectionRuleProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-baseline justify-between pb-3 gap-2">
         <div className="flex items-center space-x-3">
           {number && (
-            <span className="inline-flex items-center px-3 py-0.5 rounded-full bg-[#5D7052]/10 text-[#5D7052] text-xs font-bold tracking-wider">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-[#5E6AD2]/20 border border-[#5E6AD2]/30 text-[#5E6AD2] text-xs font-mono font-semibold tracking-wider">
               {number}
             </span>
           )}
           {title && (
-            <h2 className="font-serif text-2xl md:text-3xl font-bold tracking-tight text-[#2C2C24]">
+            <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#EDEDEF]">
               {title}
             </h2>
           )}
         </div>
         {subtitle && (
-          <span className="text-xs tracking-wider text-[#78786C] font-medium uppercase">
-            ~ {subtitle}
+          <span className="text-xs tracking-widest text-[#8A8F98] font-mono uppercase">
+            // {subtitle}
           </span>
         )}
       </div>
 
-      {/* Gentle timber rule with organic pebble center accent */}
-      <div className="w-full h-[1.5px] bg-[#DED8CF] relative flex items-center justify-center">
-        <div className="w-4 h-2.5 rounded-full bg-[#E6DCCD] border border-[#DED8CF]" />
-      </div>
+      {/* Hairline rule with subtle gradient */}
+      <div className="w-full h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
     </div>
   );
 };
