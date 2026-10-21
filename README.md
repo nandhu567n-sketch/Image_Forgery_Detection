@@ -277,4 +277,5 @@ augmentation, or train with a larger/balanced tampered set.
 
 **Good luck!** 🎓 <small>For phase-report / viva explanations of the fused weights and
 technique trade-offs, sections 4–5 of this report are the key reference.</small>#   I m a g e _ F o r g e r y _ D e t e c t i o n  
+ #   I m a g e _ F o r g e r y _ D e t e c t i o n  
  
